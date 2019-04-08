@@ -7,7 +7,7 @@ let requestIpLogger = (req, res, next) => {
   console.log(req.method+" Request Made from " + remoteIp + ' for route ' + req.originalUrl);
 
     if (req.method === 'OPTIONS') {
-      console.log('!OPTIONS');
+      console.log('OPTIONS');
       var headers = {};
       // IE8 does not allow domains to be specified, just the *
       // headers["Access-Control-Allow-Origin"] = req.headers.origin;

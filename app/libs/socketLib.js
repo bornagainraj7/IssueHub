@@ -19,9 +19,7 @@ let setServer = (server) => {
     myIO.on('connection', (socket) => {
         let currentUser;
 
-        console.log("Emitting verify user");
         socket.emit('verify-user', '');
-
 
         socket.on('set-user', (authToken) => {
             token.verifyWithoutSecret(authToken, (err, result) => {
@@ -67,9 +65,6 @@ let setServer = (server) => {
             }
             list.getAllUsers(issueId, (err, result) => {
                 if(err) {
-                    console.log("partial");
-                    console.log(err);
-
                     for(userId of err) {
                         myIO.emit(userId, emitData);
                     }
@@ -91,9 +86,6 @@ let setServer = (server) => {
             }
             list.getAllUsers(issueId, (err, result) => {
                 if (err) {
-                    console.log("partial");
-                    console.log(err);
-
                     for (userId of err) {
                         myIO.emit(userId, emitData);
                     }
@@ -114,9 +106,6 @@ let setServer = (server) => {
             }
             list.getAllUsers(issueId, (err, result) => {
                 if (err) {
-                    console.log("partial");
-                    console.log(err);
-
                     for (userId of err) {
                         myIO.emit(userId, emitData);
                     }
@@ -137,9 +126,6 @@ let setServer = (server) => {
             }
             list.getAllUsers(issueId, (err, result) => {
                 if (err) {
-                    console.log("partial");
-                    console.log(err);
-
                     for (userId of err) {
                         myIO.emit(userId, emitData);
                     }
@@ -160,9 +146,6 @@ let setServer = (server) => {
             }
             list.getAllUsers(issueId, (err, result) => {
                 if (err) {
-                    console.log("partial");
-                    console.log(err);
-
                     for (userId of err) {
                         myIO.emit(userId, emitData);
                     }
@@ -177,7 +160,6 @@ let setServer = (server) => {
 
 
         socket.on('disconnect', () => {
-            console.log("user is disconnected");
             let removeIndex = allOnlineUsers.map((user) => {return user.userId}).indexOf(socket.userId);
             allOnlineUsers.splice(removeIndex, 1);
 

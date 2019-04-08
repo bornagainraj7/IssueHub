@@ -15,7 +15,6 @@ const AuthModel = require('./../models/Auth');
 
 // start user signup function 
 let signUpUser = (req, res) => {
-    // console.log(req.body);
     let newUser = new UserModel({
         userId: shortid.generate(),
         firstName: req.body.firstName,
@@ -52,7 +51,7 @@ let signUpUser = (req, res) => {
         return new Promise((resolve, reject) => {
             newUser.save((err, result) => {
                 if(err) {
-                    logger.error(`Error while creating user ${err}`, "UserController: signUpUser(): createUser()", "high");
+                    logger.error(`${err}`, "UserController: signUpUser(): createUser()", "high");
                     let apiResponse = (true, "Error while creating user", 503, null);
                     reject(apiResponse);
                 } else {
@@ -127,8 +126,7 @@ let signUpUser = (req, res) => {
 
                     result.save((err, newTokenDetails) => {
                         if (err) {
-                            console.log(err);
-                            logger.error(`Error occurred: ${err.message}`, "userController: saveToken()", "high");
+                            logger.error(`${err}`, "userController: saveToken()", "high");
                             let apiResponse = response.generate(true, "Failed to generate Token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -177,7 +175,7 @@ let signUpUser = (req, res) => {
                 res.status(apiResponse.status).send(apiResponse);
             })
             .catch((err) => {
-                logger.error(`Error: ${err}`, "UserController: signUpUser()", "high");
+                logger.error(`${err}`, "UserController: signUpUser()", "high");
                 res.status(err.status).send(err);
             });
         }
@@ -244,7 +242,7 @@ let loginUser = (req, res) => {
         return new Promise((resolve, reject) => {
             tokenLib.generateToken(userDetailsObj, (err, tokenDetails) => {
                 if(err) {
-                    logger.error(`Couldnt generate token, error: ${err}`, "UserController: generateToken()", "med");
+                    logger.error(`${err}`, "UserController: generateToken()", "med");
                     let apiResponse = response.generate(true, "Failed to generate token", 503, null);
                     reject(apiResponse);
                 } else {
@@ -299,8 +297,7 @@ let loginUser = (req, res) => {
 
                     result.save((err, newTokenDetails) => {
                         if (err) {
-                            console.log(err);
-                            logger.error(`Error occurred: ${err.message}`, "userController: saveToken()", "high");
+                            logger.error(`${err}`, "userController: saveToken()", "high");
                             let apiResponse = response.generate(true, "Failed to generate Token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -330,7 +327,6 @@ let loginUser = (req, res) => {
         let apiResponse = response.generate(false, "User logged in successfully", 201, resolve);
         res.status(apiResponse.status).send(apiResponse);
     }).catch((err) => {
-        console.log(err);
         res.status(err.status).send(err);
     });
 
@@ -355,7 +351,7 @@ let loginWithGoogle = (req, res) => {
         return new Promise((resolve, reject) => {
             newUser.save((err, result) => {
                 if (err) {
-                    logger.error(`Error while creating user ${err}`, "UserController: loginWithGoogle(): createUser()", "high");
+                    logger.error(`${err}`, "UserController: loginWithGoogle(): createUser()", "high");
                     let apiResponse = (true, "Error while creating user", 503, null);
                     reject(apiResponse);
                 } else {
@@ -431,8 +427,7 @@ let loginWithGoogle = (req, res) => {
 
                     result.save((err, newTokenDetails) => {
                         if (err) {
-                            console.log(err);
-                            logger.error(`Error occurred: ${err.message}`, "userController: loginWithGoogle(): saveToken()", "high");
+                            logger.error(`${err}`, "userController: loginWithGoogle(): saveToken()", "high");
                             let apiResponse = response.generate(true, "Failed to generate Token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -489,7 +484,7 @@ let getAllUsers = (req, res) => {
     UserModel.find().select('-password -__v -_id').lean()
     .exec((err, result) => {
         if(err) {
-            logger.error(`Unable to retrieve users: ${err}`, "UserController: getAllUsers()", 'med');
+            logger.error(`${err}`, "UserController: getAllUsers()", 'med');
             let apiResponse = response.generate(true, "Unable to retrieve users", 503, null);
             res.status(apiResponse.status).send(apiResponse);
         } else if(check.isEmpty(result)) {
@@ -563,7 +558,6 @@ let getSingleUser = (req, res) => {
 let editUser = (req, res) => {
     let userId = req.params.userId;
     let options = req.body;
-    console.log(options);
 
     let verifyInput = () => {
         return new Promise((resolve, reject) => {
@@ -582,7 +576,7 @@ let editUser = (req, res) => {
         return new Promise((resolve, reject) => {
             UserModel.findOne({'userId': userId}).exec((err, result) => {
                 if(err) {
-                    logger.error(`Error occurred: ${err}`, "UserController: editUser(): findUser()", "high");
+                    logger.error(`${err}`, "UserController: editUser(): findUser()", "high");
                     let apiResponse = response.generate(true, "Couldn't locate user", 500, null);
                     reject(apiResponse);
                 } else if(check.isEmpty(result)) {
@@ -591,7 +585,6 @@ let editUser = (req, res) => {
                     reject(apiResponse);
                 } else {
                     logger.info(`Found user`, "UserController: editUser(): findUser()", "successful");
-                    //console.log(result.toObject());
                     resolve(req);
                 }
             });
@@ -600,16 +593,13 @@ let editUser = (req, res) => {
 
     let updateUser = () => {
         return new Promise((resolve, reject) => {
-            console.log("in promise");
-            console.log(options);
             
             UserModel.updateOne({ 'userId': userId }, options).exec((err, result) => {
                 if (err) {
-                    logger.error(`Error occurred: ${err}`, "UserController: editUser(): updateUser()", "high");
+                    logger.error(`${err}`, "UserController: editUser(): updateUser()", "high");
                     let apiResponse = response.generate(true, "failed to update user", 503, null);
                     reject(apiResponse);
                 } else if (result.result.n > 0) {
-                    console.log(result);
                     logger.info(`User updated successfully`, "UserController: editUser(): updateUser()", "successful");
                     resolve(result);
                 } else {
@@ -639,7 +629,7 @@ let editUser = (req, res) => {
 let logout = (req, res) => {
     AuthModel.deleteOne({'userId': req.user.userId}).exec((err, result) => {
         if(err) {
-            logger.error(`Logout error: ${err}`, "UserController: Logout()", "high");
+            logger.error(`${err}`, "UserController: Logout()", "high");
             let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null);
             res.status(apiResponse.status).send(apiResponse);
         } else if(result.result.n > 0) {
@@ -694,9 +684,8 @@ let deleteUser = (req, res) => {
         return new Promise((resolve, reject) => {
             UserModel.deleteOne({'userId': userId})
             .exec((err, result) => {
-                console.log(result.result.n);
                 if(err) {
-                    logger.error(`delete user error: ${err}`, "UserController: deleteUser(): removeUser()", "high");
+                    logger.error(`${err}`, "UserController: deleteUser(): removeUser()", "high");
                     let apiResponse = response.generate(true, "Unable to delete user", 500, null);
                     reject(apiResponse);
                 } else {
@@ -713,7 +702,7 @@ let deleteUser = (req, res) => {
             AuthModel.deleteOne({ 'userId': userId })
             .exec((err, removed) => {
                 if (err) {
-                    logger.error(`unable to delete user auth, error: ${err}`, "UserController: deleteUser(): removeAuth()", "high");
+                    logger.error(`${err}`, "UserController: deleteUser(): removeAuth()", "high");
                     let apiResponse = response.generate(true, "Unable to delete user auth", 500, null);
                     reject(apiResponse);
                 } else if (removed.result.n > 0) {

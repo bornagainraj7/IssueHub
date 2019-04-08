@@ -13,9 +13,6 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const morgan = require('morgan');
 
-// const passport = require('passport');
-// const passportMiddleware = require('./app/middlewares/passport');
-
 
 app.use(morgan('dev'));
 
@@ -27,8 +24,6 @@ app.use(globalErrorMiddleware.globalErrorHandler);
 
 app.use("/images", express.static(__dirname + "/images"));
 
-//Passport
-// app.use(passport.initialize());
 
 
 

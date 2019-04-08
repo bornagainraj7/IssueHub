@@ -102,7 +102,6 @@ let createNewIssue = (req, res) => {
         status: req.body.status,
         createdOn: time.now()
     });
-    // console.log(newIssue);
     newIssue.save((err, result) => {
         if (err) {
             logger.error(`${err}`, "IssueController: createNewIssue(): generateIssue()", "high");
@@ -119,102 +118,6 @@ let createNewIssue = (req, res) => {
 
 }
 
-//createIssue controller copy
-let createNewIssueCopy = (req, res) => {
-    let today = time.now();
-    const url = req.protocol + '://' + req.get("host");
-    // let assignedTo = req.body.assignedTo;
-    // let assignedToUser = 'some user';
-
-    let findUser = () => {
-
-        return new Promise((resolve, reject) => {
-            UserModel.findOne({ userId: assignedTo }).lean().exec((err, result) => {
-                if (err) {
-                    logger.error(`Error occurred: ${err}`, "IssueController: createNewIssue(): findUser()", "high");
-                    let apiResonse = response.generate(true, "Couldn't find the user", 500, null);
-                    reject(apiResonse);
-                } if (check.isEmpty(result)) {
-                    logger.error(`No user found`, "IssueController: createNewIssue(): findUser()", "med");
-                    let apiResonse = response.generate(true, "Couldn't find the user", 404, null);
-                    reject(apiResonse);
-                } else {
-                    assignedToUser = result.fullName;
-                    resolve(req);
-                }
-            })
-        });
-    }
-
-
-    let generateIssue = () => {
-        let newIssue = new IssueModel({
-            issueId: shortid.generate(),
-            title: req.body.title,
-            description: req.body.description,
-            imagePath: url + "/images/" + req.file.filename,
-            creatorId: req.user.userId,
-            creatorName: req.user.fullName,
-            status: req.body.status,
-            createdOn: today
-        });
-        console.log(newIssue);
-        return new Promise((resolve, reject) => {
-            newIssue.save((err, result) => {
-                if (err) {
-                    logger.error(`${err}`, "IssueController: createNewIssue(): generateIssue()", "high");
-                    let apiResonse = response.generate(true, "Couldn't create issue", 500, null);
-                    reject(apiResonse);
-
-                } else {
-                    logger.info("New Issue created successfully", "IssueController: createNewIssue(): generateIssue()", "successful");
-                    newResult = newIssue.toObject();
-                    resolve(newResult);
-                }
-            });
-        });
-    }
-
-    let addAssigneeForIssue = (prevResult) => {
-
-        let newAssignee = new AssignModel({
-            assignId: shortid.generate(),
-            issueId: issueId,
-            assignedById: req.user.userId,
-            assignedByName: req.user.fullName,
-            assignedToId: assignedTo,
-            assignedToName: assignedToUser,
-            assignedOn: today
-        });
-
-        return new Promise((resolve, reject) => {
-            newAssignee.save((err, result) => {
-                if (err) {
-                    logger.error(`${err}`, "IssueController: createNewIssue(): addAssigneeForIssue()", "high");
-                    let apiResonse = response.generate(true, "Couldn't create issue", 500, null);
-                    reject(apiResonse);
-                } else {
-                    logger.info("New Issue created successfully", "IssueController: createNewIssue(): addAssigneeForIssue()", "successful");
-                    resolve(prevResult);
-                }
-            })
-        });
-
-    }
-
-
-    generateIssue(req, res)
-        .then(generateIssue)
-        // .then(addAssigneeForIssue)
-        .then((resolve) => {
-            let apiResponse = response.generate(false, "New Issue created successfully", 201, resolve);
-            res.send(apiResponse);
-        }).catch((err) => {
-            console.log("error occurred");
-            res.status(err.status).send(err);
-        });
-
-}
 
 
 let getSingleIssue = (req, res) => {
@@ -641,7 +544,6 @@ let addToWatchList = (req, res) => {
             userName: userName,
             addedOn: time.now()
         });
-        console.log(newWatcher);
         return new Promise((resolve, reject) => {
             newWatcher.save((err, result) => {
                 if (err) {
@@ -651,7 +553,6 @@ let addToWatchList = (req, res) => {
                 } else {
                     logger.info("successfully added to watch list", "IssueController: addToWatchList()", "successful");
                     watcherObj = newWatcher.toObject();
-                    console.log(watcherObj);
                     resolve(watcherObj);
                 }
             });
@@ -700,7 +601,6 @@ let getAllWatchersOnIssue = (req, res) => {
                         reject(apiResponse);
                     } else {
                         logger.info("All watchers retrivied successfully", "IssueController: getAllWatchersOnIssue(): findWatchers()", "successful");
-                        console.log(result);
                         resolve(result);
                     }
                 });
@@ -779,7 +679,6 @@ let addAssignee = (req, res) => {
             assignedToName: assignedToUser,
             assignedOn: time.now()
         });
-        console.log(newAssignee);
 
         return new Promise((resolve, reject) => {
             newAssignee.save((err, result) => {

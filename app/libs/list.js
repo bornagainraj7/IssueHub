@@ -23,7 +23,6 @@ let getAllUsers = (issue, cb) => {
                     logger.error(`Couldn't find any issue with the given issueId`, "List Library: getAllUsersOnIssue(): getCreator()", "med");
                     reject();
                 } else {
-                    console.log("getCreator: ");
                     allUsers.push(result.creatorId);
                     resolve();
                 }
@@ -43,8 +42,6 @@ let getAllUsers = (issue, cb) => {
                     logger.error(`Couldn't find any assignee on the issue`, "List Library: getAllUsersOnIssue(): getAssignees()", "med");
                     resolve();
                 } else {
-                    console.log("getAssignees: ");
-                    console.log(result);
                     for (let x of result) {
                         allUsers.push(x.assignedToId);
                     }
@@ -66,8 +63,6 @@ let getAllUsers = (issue, cb) => {
                     logger.error(`Couldn't find any watcher on the issue`, "List Library: getAllUsersOnIssue(): getWatchers()", "med");
                     reject();
                 } else {
-                    console.log("getWatchers: ");
-                    console.log(result);
                     for (let x of result) {
                         allUsers.push(x.userId);
                     }

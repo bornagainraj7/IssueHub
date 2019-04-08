@@ -7,9 +7,9 @@ let email = (email) => {
     }
   }
   
-    /* Minimum 8 characters which contain only characters,numeric digits, underscore and first character must be a letter */
+    /* Minimum 6 characters which contain only characters,numeric digits, underscore and first character must be a letter */
   let password = (password) => {
-    let passwordRegex = /^[A-Za-z0-9]\w{7,}$/
+    let passwordRegex = /^[A-Za-z0-9]\w{5,}$/
     if (password.match(passwordRegex)) {
       return password;
     } else {
