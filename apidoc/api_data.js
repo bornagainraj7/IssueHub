@@ -1,6 +1,602 @@
 define({ "api": [
   {
     "type": "get",
+    "url": "/api/issue/assignee/remove/:assignId",
+    "title": "Remove an Assignee by assignId",
+    "version": "1.0.0",
+    "group": "Assignee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "assignId",
+            "description": "<p>to be passed as URL parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Successfully removed assignee from the issue\",\n           \"status\": 201,\n           \"data\": null\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Assignee",
+    "name": "GetApiIssueAssigneeRemoveAssignid"
+  },
+  {
+    "type": "post",
+    "url": "/api/issue/assignee/add",
+    "title": "Add Assignee on Issue",
+    "version": "1.0.0",
+    "group": "Assignee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "issueId",
+            "description": "<p>to be passed as a body parameter</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "assignedToId",
+            "description": "<p>to be passed as a body parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\":false,\n           \"message\":\"New assignee created successfully\",\n           \"status\":201,\n           \"data\":{\n                       \"assignId\": \"string\",\n                       \"issueId\": \"string\",\n                       \"assignedById\": \"string\",\n                       \"assignedByName\": \"string\",\n                       \"assignedToId\": \"string\",\n                       \"assignedToName\": \"string,\n                       \"assignedOn\": \"Date\"\n               }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Assignee",
+    "name": "PostApiIssueAssigneeAdd"
+  },
+  {
+    "type": "post",
+    "url": "/api/issue/assignee/all/:issueId",
+    "title": "Get all Assignee on Issue",
+    "version": "1.0.0",
+    "group": "Assignee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "issueId",
+            "description": "<p>to be passed as a URL parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\":false,\n           \"message\":\"All assignees retrivied successfully\",\n           \"status\":200,\n           \"data\":[{\n                       \"assignId\": \"string\",\n                       \"issueId\": \"string\",\n                       \"assignedById\": \"string\",\n                       \"assignedByName\": \"string\",\n                       \"assignedToId\": \"string\",\n                       \"assignedToName\": \"string,\n                       \"assignedOn\": \"Date\"\n               }]\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Assignee",
+    "name": "PostApiIssueAssigneeAllIssueid"
+  },
+  {
+    "type": "get",
+    "url": "/api/issue/comment/all/:issueId",
+    "title": "get All comments on Issue",
+    "version": "1.0.0",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "issueId",
+            "description": "<p>to be passed as a URL parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\":false,\n           \"message\":\"All comments retrivied successfully\",\n           \"status\":200,\n           \"data\":[{\n                       \"commentId\": \"string\",\n                       \"comment\": \"string\",\n                       \"issueId\": \"string\",\n                       \"creatorId\": \"string\",\n                       \"creatorName\": \"string\",\n                       \"createdOn\": \"Date\"\n               }]\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Comment",
+    "name": "GetApiIssueCommentAllIssueid"
+  },
+  {
+    "type": "post",
+    "url": "/api/issue/comment/create",
+    "title": "Create comment on Issue",
+    "version": "1.0.0",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "issueId",
+            "description": "<p>to be passed as a body parameter</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "comment",
+            "description": "<p>to be passed as a body parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\":false,\n           \"message\":\"Comment was added successfully\",\n           \"status\":201,\n           \"data\":{\n                       \"commentId\": \"string\",\n                       \"comment\": \"string\",\n                       \"issueId\": \"string\",\n                       \"creatorId\": \"string\",\n                       \"creatorName\": \"string\",\n                       \"createdOn\": \"Date\"\n               }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Comment",
+    "name": "PostApiIssueCommentCreate"
+  },
+  {
+    "type": "post",
+    "url": "/api/issue/comment/delete/",
+    "title": "Delete comment by comment",
+    "version": "1.0.0",
+    "group": "Comment",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "commentId",
+            "description": "<p>to be passed as body parameter</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "issueId",
+            "description": "<p>to be passed as body parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Successfully deleted comment\",\n           \"status\": 201,\n           \"data\": null\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Comment",
+    "name": "PostApiIssueCommentDelete"
+  },
+  {
+    "type": "get",
+    "url": "/api/issue/count/all",
+    "title": "Count of all Issues",
+    "version": "1.0.0",
+    "group": "Count",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Count of all the issues retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Count",
+    "name": "GetApiIssueCountAll"
+  },
+  {
+    "type": "get",
+    "url": "/api/issue/count/backlog",
+    "title": "Count of issue with backlog status",
+    "version": "1.0.0",
+    "group": "Count",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue in backlog status retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Count",
+    "name": "GetApiIssueCountBacklog"
+  },
+  {
+    "type": "get",
+    "url": "/api/issue/count/byuser",
+    "title": "Count of issue added by user",
+    "version": "1.0.0",
+    "group": "Count",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue added by user retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Count",
+    "name": "GetApiIssueCountByuser"
+  },
+  {
+    "type": "get",
+    "url": "/api/issue/count/done",
+    "title": "Count of issue with done status",
+    "version": "1.0.0",
+    "group": "Count",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue in done status retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Count",
+    "name": "GetApiIssueCountDone"
+  },
+  {
+    "type": "get",
+    "url": "/api/issue/count/inprogress",
+    "title": "Count of issue with in-progress status",
+    "version": "1.0.0",
+    "group": "Count",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue in-progress status retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Count",
+    "name": "GetApiIssueCountInprogress"
+  },
+  {
+    "type": "get",
+    "url": "/api/issue/count/intest",
+    "title": "Count of issue with in-test status",
+    "version": "1.0.0",
+    "group": "Count",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue in-test status retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Count",
+    "name": "GetApiIssueCountIntest"
+  },
+  {
+    "type": "get",
+    "url": "/api/users/count/all",
+    "title": "number of total signedup users",
+    "version": "1.0.0",
+    "group": "Count",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Count of all users retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "Count",
+    "name": "GetApiUsersCountAll"
+  },
+  {
+    "type": "get",
     "url": "/api/issue/all",
     "title": "Retrieve All Issues",
     "version": "1.0.0",
@@ -70,348 +666,6 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/issue/assignee/remove/:assignId",
-    "title": "Remove an Assignee by assignId",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "assignId",
-            "description": "<p>to be passed as URL parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Successfully removed assignee from the issue\",\n           \"status\": 201,\n           \"data\": null\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueAssigneeRemoveAssignid"
-  },
-  {
-    "type": "get",
-    "url": "/api/issue/comment/all/:issueId",
-    "title": "get All comments on Issue",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "issueId",
-            "description": "<p>to be passed as a URL parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\":false,\n           \"message\":\"All comments retrivied successfully\",\n           \"status\":200,\n           \"data\":[{\n                       \"commentId\": \"string\",\n                       \"comment\": \"string\",\n                       \"issueId\": \"string\",\n                       \"creatorId\": \"string\",\n                       \"creatorName\": \"string\",\n                       \"createdOn\": \"Date\"\n               }]\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueCommentAllIssueid"
-  },
-  {
-    "type": "get",
-    "url": "/api/issue/count/all",
-    "title": "Count of all Issues",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Count of all the issues retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueCountAll"
-  },
-  {
-    "type": "get",
-    "url": "/api/issue/count/backlog",
-    "title": "Count of issue with backlog status",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue in backlog status retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueCountBacklog"
-  },
-  {
-    "type": "get",
-    "url": "/api/issue/count/byuser",
-    "title": "Count of issue added by user",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue added by user retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueCountByuser"
-  },
-  {
-    "type": "get",
-    "url": "/api/issue/count/done",
-    "title": "Count of issue with done status",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue in done status retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueCountDone"
-  },
-  {
-    "type": "get",
-    "url": "/api/issue/count/inprogress",
-    "title": "Count of issue with in-progress status",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue in-progress status retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueCountInprogress"
-  },
-  {
-    "type": "get",
-    "url": "/api/issue/count/intest",
-    "title": "Count of issue with in-test status",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Count of issue in-test status retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueCountIntest"
-  },
-  {
-    "type": "get",
     "url": "/api/issue/:issueId",
     "title": "Retrieve Single Issues",
     "version": "1.0.0",
@@ -457,315 +711,6 @@ define({ "api": [
     "filename": "app/routes/issue.js",
     "groupTitle": "Issue",
     "name": "GetApiIssueIssueid"
-  },
-  {
-    "type": "get",
-    "url": "/api/issue/watch/all/:issueId",
-    "title": "get All watchers on Issue",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "issueId",
-            "description": "<p>to be passed as a URL parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\":false,\n           \"message\":\"All Watchers retrivied successfully\",\n           \"status\":200,\n           \"data\":[{\n                       \"watcherId\": \"string\",\n                       \"issueId\": \"string\",\n                       \"userId\": \"string\",\n                       \"userName\": \"string\",\n                       \"addedOn\": \"Date\"\n               }]\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "GetApiIssueWatchAllIssueid"
-  },
-  {
-    "type": "post",
-    "url": "/api/issue/add/watch",
-    "title": "Add to Watchlist on Issue",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "issueId",
-            "description": "<p>to be passed as a body parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\":false,\n           \"message\":\"You were successfully added to watch list for this issue\",\n           \"status\":201,\n           \"data\":{\n                       \"watcherId\": \"string\",\n                       \"issueId\": \"string\",\n                       \"userId\": \"string\",\n                       \"userName\": \"string\",\n                       \"addedOn\": \"Date\"\n               }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "PostApiIssueAddWatch"
-  },
-  {
-    "type": "post",
-    "url": "/api/issue/assignee/add",
-    "title": "Add to Assignee on Issue",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "issueId",
-            "description": "<p>to be passed as a body parameter</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "assignedToId",
-            "description": "<p>to be passed as a body parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\":false,\n           \"message\":\"New assignee created successfully\",\n           \"status\":201,\n           \"data\":{\n                       \"assignId\": \"string\",\n                       \"issueId\": \"string\",\n                       \"assignedById\": \"string\",\n                       \"assignedByName\": \"string\",\n                       \"assignedToId\": \"string\",\n                       \"assignedToName\": \"string,\n                       \"assignedOn\": \"Date\"\n               }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "PostApiIssueAssigneeAdd"
-  },
-  {
-    "type": "post",
-    "url": "/api/issue/assignee/all/:issueId",
-    "title": "Get all Assignee on Issue",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "issueId",
-            "description": "<p>to be passed as a URL parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\":false,\n           \"message\":\"All assignees retrivied successfully\",\n           \"status\":200,\n           \"data\":[{\n                       \"assignId\": \"string\",\n                       \"issueId\": \"string\",\n                       \"assignedById\": \"string\",\n                       \"assignedByName\": \"string\",\n                       \"assignedToId\": \"string\",\n                       \"assignedToName\": \"string,\n                       \"assignedOn\": \"Date\"\n               }]\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "PostApiIssueAssigneeAllIssueid"
-  },
-  {
-    "type": "post",
-    "url": "/api/issue/comment/create",
-    "title": "Create comment on Issue",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "issueId",
-            "description": "<p>to be passed as a body parameter</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "comment",
-            "description": "<p>to be passed as a body parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\":false,\n           \"message\":\"Comment was added successfully\",\n           \"status\":201,\n           \"data\":{\n                       \"commentId\": \"string\",\n                       \"comment\": \"string\",\n                       \"issueId\": \"string\",\n                       \"creatorId\": \"string\",\n                       \"creatorName\": \"string\",\n                       \"createdOn\": \"Date\"\n               }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "PostApiIssueCommentCreate"
-  },
-  {
-    "type": "post",
-    "url": "/api/issue/comment/delete/",
-    "title": "Delete comment by comment",
-    "version": "1.0.0",
-    "group": "Issue",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "commentId",
-            "description": "<p>to be passed as body parameter</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "issueId",
-            "description": "<p>to be passed as body parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Successfully deleted comment\",\n           \"status\": 201,\n           \"data\": null\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/issue.js",
-    "groupTitle": "Issue",
-    "name": "PostApiIssueCommentDelete"
   },
   {
     "type": "post",
@@ -1000,47 +945,6 @@ define({ "api": [
     "filename": "app/routes/user.js",
     "groupTitle": "User",
     "name": "GetApiUsersAll"
-  },
-  {
-    "type": "get",
-    "url": "/api/users/count/all",
-    "title": "number of total signedup users",
-    "version": "1.0.0",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n           \"error\": false,\n           \"message\": \"Count of all users retrieved\",\n           \"status\": 200,\n           \"data\": \"number\"\n           }\n       }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "app/routes/user.js",
-    "groupTitle": "User",
-    "name": "GetApiUsersCountAll"
   },
   {
     "type": "get",
@@ -1371,5 +1275,101 @@ define({ "api": [
     "filename": "app/routes/user.js",
     "groupTitle": "User",
     "name": "PutApiUsersEditUserid"
+  },
+  {
+    "type": "get",
+    "url": "/api/issue/watch/all/:issueId",
+    "title": "Get All watchers on Issue",
+    "version": "1.0.0",
+    "group": "Watchlist",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "issueId",
+            "description": "<p>to be passed as a URL parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\":false,\n           \"message\":\"All Watchers retrivied successfully\",\n           \"status\":200,\n           \"data\":[{\n                       \"watcherId\": \"string\",\n                       \"issueId\": \"string\",\n                       \"userId\": \"string\",\n                       \"userName\": \"string\",\n                       \"addedOn\": \"Date\"\n               }]\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Watchlist",
+    "name": "GetApiIssueWatchAllIssueid"
+  },
+  {
+    "type": "post",
+    "url": "/api/issue/add/watch",
+    "title": "Add to Watchlist on Issue",
+    "version": "1.0.0",
+    "group": "Watchlist",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "issueId",
+            "description": "<p>to be passed as a body parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\":false,\n           \"message\":\"You were successfully added to watch list for this issue\",\n           \"status\":201,\n           \"data\":{\n                       \"watcherId\": \"string\",\n                       \"issueId\": \"string\",\n                       \"userId\": \"string\",\n                       \"userName\": \"string\",\n                       \"addedOn\": \"Date\"\n               }\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/issue.js",
+    "groupTitle": "Watchlist",
+    "name": "PostApiIssueAddWatch"
   }
 ] });

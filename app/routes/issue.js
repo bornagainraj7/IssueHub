@@ -212,7 +212,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {post} /api/issue/comment/create Create comment on Issue
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Comment
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      *  @apiParam {String} issueId to be passed as a body parameter
      *  @apiParam {String} comment to be passed as a body parameter
@@ -245,7 +245,7 @@ module.exports.setRouter = (route) => {
      /**
      * @api {post} /api/issue/comment/delete/ Delete comment by comment
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Comment
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * @apiParam {String} commentId to be passed as body parameter
      * @apiParam {String} issueId to be passed as body parameter
@@ -271,7 +271,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/issue/comment/all/:issueId get All comments on Issue
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Comment
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      *  @apiParam {String} issueId to be passed as a URL parameter
      * 
@@ -305,7 +305,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {post} /api/issue/add/watch Add to Watchlist on Issue
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Watchlist
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      *  @apiParam {String} issueId to be passed as a body parameter
      * 
@@ -334,9 +334,9 @@ module.exports.setRouter = (route) => {
 
     route.get(`${baseUrl}/watch/all/:issueId`, auth.isAuthorised, issueController.getAllWatchersOnIssue);
     /**
-     * @api {get} /api/issue/watch/all/:issueId get All watchers on Issue
+     * @api {get} /api/issue/watch/all/:issueId Get All watchers on Issue
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Watchlist
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      *  @apiParam {String} issueId to be passed as a URL parameter
      * 
@@ -367,9 +367,9 @@ module.exports.setRouter = (route) => {
     //addAssignee route
     route.post(`${baseUrl}/assignee/add`, auth.isAuthorised, issueController.addAssignee);
     /**
-     * @api {post} /api/issue/assignee/add Add to Assignee on Issue
+     * @api {post} /api/issue/assignee/add Add Assignee on Issue
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Assignee
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      *  @apiParam {String} issueId to be passed as a body parameter
      *  @apiParam {String} assignedToId to be passed as a body parameter
@@ -404,7 +404,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {post} /api/issue/assignee/all/:issueId Get all Assignee on Issue
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Assignee
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      *  @apiParam {String} issueId to be passed as a URL parameter
      * 
@@ -438,7 +438,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/issue/assignee/remove/:assignId  Remove an Assignee by assignId
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Assignee
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * @apiParam {String} assignId to be passed as URL parameter
      * 
@@ -465,7 +465,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/issue/count/byuser Count of issue added by user
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Count
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * 
      *  @apiSuccessExample {json} Success-Response:
@@ -490,7 +490,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/issue/count/done Count of issue with done status
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Count
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * 
      *  @apiSuccessExample {json} Success-Response:
@@ -515,7 +515,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/issue/count/inprogress Count of issue with in-progress status
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Count
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * 
      *  @apiSuccessExample {json} Success-Response:
@@ -541,7 +541,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/issue/count/intest Count of issue with in-test status
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Count
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * 
      *  @apiSuccessExample {json} Success-Response:
@@ -566,7 +566,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/issue/count/backlog Count of issue with backlog status
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Count
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * 
      *  @apiSuccessExample {json} Success-Response:
@@ -592,7 +592,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/issue/count/all Count of all Issues
      * @apiVersion 1.0.0
-     * @apiGroup Issue
+     * @apiGroup Count
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * 
      *  @apiSuccessExample {json} Success-Response:

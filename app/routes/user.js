@@ -278,7 +278,7 @@ module.exports.setRouter = (route) => {
     /**
      * @api {get} /api/users/count/all number of total signedup users
      * @apiVersion 1.0.0
-     * @apiGroup User
+     * @apiGroup Count
      * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
      * 
      *  @apiSuccessExample {json} Success-Response:
