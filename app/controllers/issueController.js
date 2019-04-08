@@ -36,6 +36,7 @@ let getAllIssue = (req, res) => {
 
 
 let getAllIssuesOnUser = (req, res) => {
+    console.log("correct");
     let userId = req.user.userId;
     let allIssueIds = [];
 
@@ -610,7 +611,7 @@ let getAllWatchersOnIssue = (req, res) => {
     verifyInput(req, res)
     .then(findWatchers)
     .then((resolve) => {
-        let apiResponse = response.generate(false, "All comments retrivied successfully", 200, resolve);
+        let apiResponse = response.generate(false, "All Watchers retrivied successfully", 200, resolve);
         res.send(apiResponse);
     }).catch((err) => {
         res.send(err);
@@ -698,7 +699,7 @@ let addAssignee = (req, res) => {
     .then(checkIfExists)
     .then(createAssignee)
     .then((resolve) => {
-        let apiResponse = response.generate(false, "new assignee created successfully", 201, resolve);
+        let apiResponse = response.generate(false, "New assignee created successfully", 201, resolve);
         res.send(apiResponse);
     }).catch((err) => {
         res.send(err);

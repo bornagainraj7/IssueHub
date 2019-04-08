@@ -55,6 +55,7 @@ fs.readdirSync(routesPath).forEach(function (file) {
 });
 // end bootstrap route
 
+
 // calling global 404 handler after route
 
 app.use(globalErrorMiddleware.globalNotFoundHandler);

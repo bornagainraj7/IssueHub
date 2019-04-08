@@ -480,6 +480,7 @@ let loginWithGoogle = (req, res) => {
     })
 }
 
+
 let getAllUsers = (req, res) => {
     UserModel.find().select('-password -__v -_id').lean()
     .exec((err, result) => {
