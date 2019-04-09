@@ -3,5 +3,5 @@
     "version": "1.0.2",
     "description": "Documentation IssueHub backend",
     "title": "IssueHub API",
-    "url": "http://localhost:3000"
+    "url": "http://api.issuehub.tk"
 }

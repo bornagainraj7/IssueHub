@@ -3,13 +3,13 @@
   "version": "1.0.2",
   "description": "Documentation IssueHub backend",
   "title": "IssueHub API",
-  "url": "http://localhost:3000",
+  "url": "http://api.issuehub.tk",
   "sampleUrl": false,
   "defaultVersion": "0.0.0",
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2019-04-08T20:42:46.584Z",
+    "time": "2019-04-09T14:27:14.577Z",
     "url": "http://apidocjs.com",
     "version": "0.17.7"
   }
