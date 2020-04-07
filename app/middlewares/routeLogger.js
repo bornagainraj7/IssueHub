@@ -4,7 +4,8 @@ const appConfig = require('./../../config/appConfig');
 let requestIpLogger = (req, res, next) => {
   let remoteIp = req.connection.remoteAddress + '://' + req.connection.remotePort;
   let realIp = req.headers['X-REAL-IP'];
-  console.log(req.method+" Request Made from " + remoteIp + ' for route ' + req.originalUrl);
+  // console.log(req.method+" Request Made from " + remoteIp + ' for route ' + req.originalUrl);
+  console.log(req.method+ ' ' + req.originalUrl);
 
     if (req.method === 'OPTIONS') {
       console.log('OPTIONS');
