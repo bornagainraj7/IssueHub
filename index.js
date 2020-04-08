@@ -6,7 +6,7 @@ const fs = require('fs');
 const app = express();
 const http = require('http');
 const appConfig = require('./config/appConfig');
-const logger = require('./app/libs/loggerLib');
+const logger = require('tracer').colorConsole();
 const routeLoggerMiddleware = require('./app/middlewares/routeLogger.js');
 const globalErrorMiddleware = require('./app/middlewares/appErrorHandler');
 const mongoose = require('mongoose');
@@ -85,7 +85,7 @@ const socketServer = socket.setServer(server);
 
 function onError(error) {
   if (error.syscall !== 'listen') {
-    logger.error(error.code + ' not equal listen', 'serverOnErrorHandler', "high");
+    logger.error(error.code + ' ' +error);
     throw error;
   }
 
@@ -93,15 +93,15 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      logger.error(error.code + ':elavated privileges required', 'serverOnErrorHandler', "high");
+      logger.error(error.code + ' ' + error);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      logger.error(error.code + ':port is already in use.', 'serverOnErrorHandler', "high");
+      logger.error(error.code + ' ' + error);
       process.exit(1);
       break;
     default:
-      logger.error(error.code + ':some unknown error occured', 'serverOnErrorHandler', "high");
+      logger.error(error.code + ' ' + error);
       throw error;
   }
 }
@@ -125,7 +125,7 @@ function onListening() {
 }
 
 process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  logger.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
   // application specific logging, throwing an error, or other logic here
 });
 
@@ -134,19 +134,17 @@ process.on('unhandledRejection', (reason, p) => {
  * database connection settings
  */
 mongoose.connection.on('error', function (err) {
-  console.log('database connection error');
-  console.log(err);
-  logger.error(err, 'mongoose connection on error handler', "high");
+  logger.error('database connection error');
+  logger.error(err);
   // process.exit(1);
 }); // end mongoose connection error
 
 mongoose.connection.on('open', function (err) {
   if (err) {
-    console.log("database error");
-    console.log(err);
-    logger.error(err, 'mongoose connection open handler', "high");
+    logger.error('database error');
+    logger.error(err);
   } else {
-    console.log("database connection open success");
+    logger.info("database connection open success");
     // logger.info("database connection open", 'database connection open handler', 10);
   }
   //process.exit(1)

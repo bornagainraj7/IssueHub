@@ -1,16 +1,16 @@
 const response = require('./../libs/responseLib');
-const logger = require('./../libs/loggerLib');
+const logger = require('tracer').colorConsole();
 
 
 let errorHandler = (err, req, res, next) => {
-    logger.error(`${err}`, "Global Error Handler", "high");
+    logger.error(err);
     let apiResponse = response.generate(true, 'Some error occured at global level',500, null);
     res.send(apiResponse);
     
 }// end request ip logger function 
 
 let notFoundHandler = (req,res,next)=>{
-    logger.error("Route not found, please check...", "Global Not Found Handler", "med");
+    logger.error("Route not found, please check...");
     let apiResponse = response.generate(true, 'Route not found in the application',404, null);
     res.status(404).send(apiResponse);
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const shortid = require('shortid');
 const time = require('./../libs/timeLib');
 const response = require('./../libs/responseLib');
-const logger = require('./../libs/loggerLib');
+const logger = require('tracer').colorConsole();
 const tokenLib = require('./../libs/tokenLib');
 const validateInput = require('../libs/paramsValidationLib');
 const passwordLib = require('./../libs/passwordLib');
@@ -32,13 +32,13 @@ let signUpUser = (req, res) => {
         return new Promise((resolve, reject) => {
             UserModel.findOne({ email: req.body.email}).exec((err, result) => {
                 if(err) {
-                    logger.error(`Error occurred: ${err.message}`, "UserController: signUpUser(): ifUserExists()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Error while checking user email", 503, null);
                     reject(apiResponse);
                 } else if(check.isEmpty(result)) {
                     resolve(req);
                 } else {
-                    logger.error("User with same email already exists", "UserController: signUpUser(): ifUserExists()", "med");
+                    logger.error("User with same email already exists");
                     let apiResponse = response.generate(true, "User with same email already exists", 503, null);
                     reject(apiResponse);
                 }
@@ -51,7 +51,7 @@ let signUpUser = (req, res) => {
         return new Promise((resolve, reject) => {
             newUser.save((err, result) => {
                 if(err) {
-                    logger.error(`${err}`, "UserController: signUpUser(): createUser()", "high");
+                    logger.error(err);
                     let apiResponse = (true, "Error while creating user", 503, null);
                     reject(apiResponse);
                 } else {
@@ -72,11 +72,11 @@ let signUpUser = (req, res) => {
         return new Promise((resolve, reject) => {
             tokenLib.generateToken(userDetailsObj, (err, tokenDetails) => {
                 if (err) {
-                    logger.error(`${err}`, "UserController: signUpUser(): generateToken()", "med");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Failed to generate token", 503, null);
                     reject(apiResponse);
                 } else {
-                    logger.info("Token generated successfully", "UserController: loginUser(): generateToken()", "successful");
+                    logger.info("Token generated successfully");
                     tokenDetails.userId = userDetailsObj.userId;
                     tokenDetails.expiresIn = 86395;
                     tokenDetails.userDetails = userDetailsObj;
@@ -84,13 +84,13 @@ let signUpUser = (req, res) => {
                 }
             });
         });
-    }// end of generate token
+    } // end of generate token
     
     let saveToken = (tokenDetails) => {
         return new Promise((resolve, reject) => {
             AuthModel.findOne({ userId: tokenDetails.userId }).exec((err, result) => {
                 if (err) {
-                    logger.error(`Error occurred: ${err.message}`, "UserController: saveToken()", "med");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Failed to generate token", 500, null);
                     reject(apiResponse);
                 } else if (check.isEmpty(result)) {
@@ -103,7 +103,7 @@ let signUpUser = (req, res) => {
 
                     newAuthToken.save((error, saveResult) => {
                         if (error) {
-                            logger.error(`Error occurred: ${err.message}`, "UserController: saveToken()", "high");
+                            logger.error(err);
                             let apiResponse = response.generate(true, "Failed to generate token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -126,7 +126,7 @@ let signUpUser = (req, res) => {
 
                     result.save((err, newTokenDetails) => {
                         if (err) {
-                            logger.error(`${err}`, "userController: saveToken()", "high");
+                            logger.error(err);
                             let apiResponse = response.generate(true, "Failed to generate Token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -143,21 +143,21 @@ let signUpUser = (req, res) => {
                 }
             })
         });
-    }// end of save token 
+    } // end of save token 
 
 
 
     if (!req.body.email) {
-        logger.error("Missing fields", "UserController: signUpUser(): validateUserInput()", "high");
+        logger.error("Missing fields");
         let apiResponse = response.generate(true, "One or more parameter(s) missing", 500, null);
         res.send(apiResponse);
     } else {
         if (!validateInput.email(req.body.email)) {
-            logger.error("Email doesn't match the required parameters", "UserController: signUpUser(): validateUserInput()", "med");
+            logger.error("Email doesn't match the required parameters");
             let apiResponse = response.generate(true, "Email doesn't match the required parameters", 401, null);
             res.send(apiResponse);
         } else if (!validateInput.password(req.body.password)) {
-            logger.error("Password doesn't match the required parameters", "UserController: signUpUser(): validateUserInput()", "med");
+            logger.error("Password doesn't match the required parameters");
             let apiResponse = response.generate(true, "Password doesn't match the required parameters", 401, null);
             res.send(apiResponse);
         } else {
@@ -175,13 +175,13 @@ let signUpUser = (req, res) => {
                 res.status(apiResponse.status).send(apiResponse);
             })
             .catch((err) => {
-                logger.error(`${err}`, "UserController: signUpUser()", "high");
+                logger.error(err);
                 res.status(err.status).send(err);
             });
         }
     }
 
-}// end user signup function 
+} // end user signup function 
 
 
 // start of login function 
@@ -192,21 +192,21 @@ let loginUser = (req, res) => {
             if(req.body.email) {
                 UserModel.findOne({ email: req.body.email }).exec((err, result) => {
                     if(err) {
-                        logger.error("Failed to find user", "UserController: LoginUser(): findUser()", "high");
+                        logger.error("Failed to find user");
                         let apiResponse = response.generate(true, "failed to find user data", 503, null);
                         reject(apiResponse);
                     } else if (check.isEmpty(result)) {
-                        logger.error("User not found", "UserController: LoginUser(): findUser()", "med");
+                        logger.error("User not found");
                         let apiResponse = response.generate(true, "User not found with the provided email, please signup", 404, null);
                         reject(apiResponse);
                     } else {
-                        logger.info("User found successfully", "UserController: LoginUser(): findUser()", "successful");
+                        logger.info("User found successfully");
                         resolve(result);
                     }
                 });
 
             } else {
-                logger.error("Email not present", "UserController: LoginUser(): findUser()", "low");
+                logger.error("Email not present");
                 let apiResponse = response.generate(true, "Email parameter is missing", 503, null);
                 reject(apiResponse);
             }
@@ -219,7 +219,7 @@ let loginUser = (req, res) => {
             passwordLib.comparePassword(req.body.password, userDetails.password, (err, match) => {
                 
                 if(err) {
-                    logger.error(`${err}`, "UserController: LoginUser(): validatePassword()", 'med');
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Couldn't validate user's password", 401, null);
                     reject(apiResponse);
                 } else if(match) {
@@ -235,14 +235,14 @@ let loginUser = (req, res) => {
                 }
             })
         })
-    }// end of validate password
+    } // end of validate password
 
     let generateToken = (userDetailsObj) => {
 
         return new Promise((resolve, reject) => {
             tokenLib.generateToken(userDetailsObj, (err, tokenDetails) => {
                 if(err) {
-                    logger.error(`${err}`, "UserController: generateToken()", "med");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Failed to generate token", 503, null);
                     reject(apiResponse);
                 } else {
@@ -254,14 +254,14 @@ let loginUser = (req, res) => {
                 }
             });
         });
-    }// end of generate token
+    } // end of generate token
 
 
     let saveToken = (tokenDetails) => {
         return new Promise((resolve, reject) => {
             AuthModel.findOne({ userId: tokenDetails.userId }).exec((err, result) => {
                 if(err) {
-                    logger.error(`Error occurred: ${err.message}`, "UserController: saveToken()", "med");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Failed to generate token", 500, null);
                     reject(apiResponse);
                 } else if (check.isEmpty(result)) {
@@ -274,7 +274,7 @@ let loginUser = (req, res) => {
 
                     newAuthToken.save((error, saveResult) => {
                         if(error) {
-                            logger.error(`Error occurred: ${err.message}`, "UserController: saveToken()", "high");
+                            logger.error(err);
                             let apiResponse = response.generate(true, "Failed to generate token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -297,7 +297,7 @@ let loginUser = (req, res) => {
 
                     result.save((err, newTokenDetails) => {
                         if (err) {
-                            logger.error(`${err}`, "userController: saveToken()", "high");
+                            logger.error(err);
                             let apiResponse = response.generate(true, "Failed to generate Token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -314,7 +314,7 @@ let loginUser = (req, res) => {
                 }
             })
         });
-    }// end of save token 
+    } // end of save token 
 
 
 
@@ -351,7 +351,7 @@ let loginWithGoogle = (req, res) => {
         return new Promise((resolve, reject) => {
             newUser.save((err, result) => {
                 if (err) {
-                    logger.error(`${err}`, "UserController: loginWithGoogle(): createUser()", "high");
+                    logger.error(err);
                     let apiResponse = (true, "Error while creating user", 503, null);
                     reject(apiResponse);
                 } else {
@@ -372,11 +372,11 @@ let loginWithGoogle = (req, res) => {
         return new Promise((resolve, reject) => {
             tokenLib.generateToken(userDetailsObj, (err, tokenDetails) => {
                 if (err) {
-                    logger.error(`${err}`, "UserController: loginWithGoogle(): generateToken()", "med");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Failed to generate token", 503, null);
                     reject(apiResponse);
                 } else {
-                    logger.info("Token generated successfully", "UserController: loginWithGoogle(): generateToken()", "successful");
+                    logger.info("Token generated successfully");
                     tokenDetails.userId = userDetailsObj.userId;
                     tokenDetails.expiresIn = 86395;
                     tokenDetails.userDetails = userDetailsObj;
@@ -384,14 +384,14 @@ let loginWithGoogle = (req, res) => {
                 }
             });
         });
-    }// end of generate token
+    } // end of generate token
 
 
     let saveToken = (tokenDetails) => {
         return new Promise((resolve, reject) => {
             AuthModel.findOne({ userId: tokenDetails.userId }).exec((err, result) => {
                 if (err) {
-                    logger.error(`${err.message}`, "UserController: loginWithGoogle(): saveToken()", "med");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Failed to generate token", 500, null);
                     reject(apiResponse);
                 } else if (check.isEmpty(result)) {
@@ -404,7 +404,7 @@ let loginWithGoogle = (req, res) => {
 
                     newAuthToken.save((error, saveResult) => {
                         if (error) {
-                            logger.error(`Error occurred: ${err.message}`, "UserController: loginWithGoogle(): saveToken()", "high");
+                            logger.error(err);
                             let apiResponse = response.generate(true, "Failed to generate token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -427,7 +427,7 @@ let loginWithGoogle = (req, res) => {
 
                     result.save((err, newTokenDetails) => {
                         if (err) {
-                            logger.error(`${err}`, "userController: loginWithGoogle(): saveToken()", "high");
+                            logger.error(err);
                             let apiResponse = response.generate(true, "Failed to generate Token", 500, null);
                             reject(apiResponse);
                         } else {
@@ -444,14 +444,14 @@ let loginWithGoogle = (req, res) => {
                 }
             })
         });
-    }// end of save token 
+    } // end of save token 
 
 
     //Actual execution
     //checking if user exists
     UserModel.findOne({email: req.body.email}).lean().exec((err, result) => {
         if(err) {
-            logger.error(`${err}`, "UserController: loginWithGoogle(): find User", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Server Error", 503, null);
             res.send(apiResponse);
         } else if(check.isEmpty(result)) {
@@ -485,15 +485,15 @@ let getAllUsers = (req, res) => {
     UserModel.find().select('-password -__v -_id').lean()
     .exec((err, result) => {
         if(err) {
-            logger.error(`${err}`, "UserController: getAllUsers()", 'med');
+            logger.error(err);
             let apiResponse = response.generate(true, "Unable to retrieve users", 503, null);
             res.status(apiResponse.status).send(apiResponse);
         } else if(check.isEmpty(result)) {
-            logger.error(`No user found in Database`, "UserController: getAllUsers()", 'med');
+            logger.error(`No user found in Database`);
             let apiResponse = response.generate(true, "No users found", 404, null);
             res.status(apiResponse.status).send(apiResponse);
         } else {
-            logger.info("All users fetched successfully", "UserController: getAllUsers()", "successful");
+            logger.info("All users fetched successfully");
             let apiResponse = response.generate(false, "All users fetched successfully", 200, result);
             res.status(apiResponse.status).send(apiResponse);
         }
@@ -508,7 +508,7 @@ let getSingleUser = (req, res) => {
     let verifyId = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(userId)) {
-                logger.error("No user id found", "UserController: getSingleUser(): verifyId()", "low");
+                logger.error("No user id found");
                 let apiResponse = response.generate(true, "No user id found", 500, null);
                 reject(apiResponse);
             } else {
@@ -524,15 +524,15 @@ let getSingleUser = (req, res) => {
             .select('-password -__v -_id').lean()
             .exec((err, result) => {
                 if (err) {
-                    logger.error(err.message, 'UserController: getSingleUser(): findUser()', "med");
+                    logger.error(err);
                     let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null);
                     reject(apiResponse);
                 } else if (check.isEmpty(result)) {
-                    logger.error('No User Found', 'User Controller: getSingleUser(): findUser()', "low");
+                    logger.error('No User Found');
                     let apiResponse = response.generate(true, 'No User Found', 404, null);
                     reject(apiResponse);
                 } else {
-                    logger.info('User Found', 'User Controller: getSingleUser(): findUser()', "successful");
+                    logger.info('User Found');
                     resolve(result);
                 }
             });
@@ -547,7 +547,7 @@ let getSingleUser = (req, res) => {
         let apiResponse = response.generate(false, "User found successfully", 200, resolve);
         res.status(apiResponse.status).send(apiResponse);
     }).catch((err) => {
-        logger.error(`Error: ${err.message}`, "UserController: getSingleUser(): catch()", "med");
+        logger.error(err);
         res.status(err.status).send(err);
     });
 
@@ -563,7 +563,7 @@ let editUser = (req, res) => {
     let verifyInput = () => {
         return new Promise((resolve, reject) => {
             if(check.isEmpty(userId)) {
-                logger.error("Empty userId string", "UserController: editUser(): verifyInput()", "low");
+                logger.error("Empty userId string");
                 let apiResponse = response.generate(true, "Empty userId string, couldn't locate user", 500, null);
                 reject(apiResponse);
             } else {
@@ -577,15 +577,15 @@ let editUser = (req, res) => {
         return new Promise((resolve, reject) => {
             UserModel.findOne({'userId': userId}).exec((err, result) => {
                 if(err) {
-                    logger.error(`${err}`, "UserController: editUser(): findUser()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Couldn't locate user", 500, null);
                     reject(apiResponse);
                 } else if(check.isEmpty(result)) {
-                    logger.error(`Cannot find user`, "UserController: editUser(): findUser()", "high");
+                    logger.error(`Cannot find user`);
                     let apiResponse = response.generate(true, "Couldn't locate user", 404, null);
                     reject(apiResponse);
                 } else {
-                    logger.info(`Found user`, "UserController: editUser(): findUser()", "successful");
+                    logger.info(`Found user`);
                     resolve(req);
                 }
             });
@@ -597,14 +597,14 @@ let editUser = (req, res) => {
             
             UserModel.updateOne({ 'userId': userId }, options).exec((err, result) => {
                 if (err) {
-                    logger.error(`${err}`, "UserController: editUser(): updateUser()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "failed to update user", 503, null);
                     reject(apiResponse);
                 } else if (result.result.n > 0) {
-                    logger.info(`User updated successfully`, "UserController: editUser(): updateUser()", "successful");
+                    logger.info(`User updated successfully`);
                     resolve(result);
                 } else {
-                    logger.error("No new data found to update user", "UserController: editUser(): updateUser()", "med");
+                    logger.error("No new data found to update user");
                     let apiResponse = response.generate(true, "No new data found to update user", 404, null);
                     reject(apiResponse);
                 }
@@ -624,21 +624,21 @@ let editUser = (req, res) => {
     });
 
 
-}// end of get edit user
+} // end of get edit user
 
 
 let logout = (req, res) => {
     AuthModel.deleteOne({'userId': req.user.userId}).exec((err, result) => {
         if(err) {
-            logger.error(`${err}`, "UserController: Logout()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null);
             res.status(apiResponse.status).send(apiResponse);
         } else if(result.result.n > 0) {
-            logger.info("User logged out successfully", "UserController: logout()", "successful");
+            logger.info("User logged out successfully");
             let apiResponse = response.generate(false, "User logged out successfully", 201, null);
             res.status(apiResponse.status).send(apiResponse);
         } else {
-            logger.error("User already logged out or invalid userId", "UserController: logout()", 'med');
+            logger.error("User already logged out or invalid userId");
             let apiResponse = response.generate(true, "User already logged out or invalid userId", 404, null);
             res.status(apiResponse.status).send(apiResponse);
         }
@@ -652,28 +652,28 @@ let deleteUser = (req, res) => {
     let validateParam = () => {
         return new Promise((resolve, reject) => {
             if(check.isEmpty(userId)) {
-                logger.error("Empty user Id", "UserController: deleteUser(): validateParam()", "med");
+                logger.error("Empty user Id");
                 let apiResponse = response.generate(true, "Invalid or empty userId", 500, null);
                 reject(apiResponse);
             } else {
                 resolve(req);
             }
         }); 
-    }// end of validateParam
+    } // end of validateParam
 
     let findUser = () => {
         return new Promise((resolve, reject) => {
             UserModel.findOne({ 'userId': userId }).exec((err, result) => {
                 if (err) {
-                    logger.error("Failed to find user", "UserController: deleteUser(): findUser()", "high");
+                    logger.error("Failed to find user");
                     let apiResponse = response.generate(true, "failed to find user data", 503, null);
                     reject(apiResponse);
                 } else if (check.isEmpty(result)) {
-                    logger.error("User not found", "UserController: deleteUser(): findUser()", "med");
+                    logger.error("User not found");
                     let apiResponse = response.generate(true, "User not found with the provided email, please signup", 404, null);
                     reject(apiResponse);
                 } else {
-                    logger.info("User found successfully", "UserController: deleteUser(): findUser()", "successful");
+                    logger.info("User found successfully");
                     resolve(result);
                 }
             });
@@ -686,39 +686,39 @@ let deleteUser = (req, res) => {
             UserModel.deleteOne({'userId': userId})
             .exec((err, result) => {
                 if(err) {
-                    logger.error(`${err}`, "UserController: deleteUser(): removeUser()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Unable to delete user", 500, null);
                     reject(apiResponse);
                 } else {
-                    logger.info("User found and deleted as per request", "UserController: deleteUser(): removeUser()", "successful");
+                    logger.info("User found and deleted as per request");
                     let apiResponse = response.generate(false, "User successfully removed", 201, result);
                     resolve(apiResponse);
                 }
             });
         });
-    }// end of remove user 
+    } // end of remove user 
 
     let removeAuth = () => {
         return new Promise((resolve, reject) => {
             AuthModel.deleteOne({ 'userId': userId })
             .exec((err, removed) => {
                 if (err) {
-                    logger.error(`${err}`, "UserController: deleteUser(): removeAuth()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Unable to delete user auth", 500, null);
                     reject(apiResponse);
                 } else if (removed.result.n > 0) {
-                    logger.info("User and its auth deleted as per request", "UserController: deleteUser(): removeAuth()", "successful");
+                    logger.info("User and its auth deleted as per request");
                     let apiResponse = response.generate(false, "User successfully removed", 201, result);
                     resolve(apiResponse);
                 } else {
-                    logger.error("Couldn't delete auth, invalid userId", "UserController: deleteUser(): removeAuth()", "med");
+                    logger.error("Couldn't delete auth, invalid userId");
                     let apiResponse = response.generate(true, "Couldn't delete user auth, invalid userId", 404, null);
                     reject(apiResponse);
                 }
             });
         });
         
-    }// end of remove auth
+    } // end of remove auth
 
 
     validateParam(req, res)
@@ -738,7 +738,7 @@ let deleteUser = (req, res) => {
 let getAllUsersCount = (req, res) => {
     UserModel.count({}).exec((err, count) => {
         if (err) {
-            logger.error(`${err}`, "UserController: getAllUsersCount()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Server error couldn't retrieve count of all users", 500, null);
             res.send(apiResponse);
         } else {

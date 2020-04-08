@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const shortid = require('shortid');
 const token = require('./tokenLib');
 const list = require('./list');
-const logger = require('./loggerLib');
+const logger = require('tracer').colorConsole();
 
 const events = require('events');
 const eventEmitter = new events.EventEmitter();

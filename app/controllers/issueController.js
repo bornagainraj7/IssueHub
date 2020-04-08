@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const shortid = require("shortid");
 const time = require("./../libs/timeLib");
 const response = require("./../libs/responseLib");
-const logger = require("./../libs/loggerLib");
+const logger = require("tracer").colorConsole();
 const check = require("./../libs/checkLib");
 
 const IssueModel = require("./../models/Issue");
@@ -18,16 +18,16 @@ let getAllIssue = (req, res) => {
     IssueModel.find()
     .sort({createdOn: -1}).select('-_id -__v').lean().exec((err, result) => {
         if(err) {
-            logger.error(`Error occurred: ${err}`, "IssueController: getAllIssue()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Failed to find issue details", 500, null);
             res.send(apiResponse);
         } else if (check.isEmpty(result)) {
             
-            logger.error("No Issue found", "IssueController: getAllIssue()", "med");
+            logger.error("No Issue found");
             let apiResponse = response.generate(true, "No issue's found", 404, null);
             res.send(apiResponse);
         } else {
-            logger.info("All Issue's successfully retrieved", "IssueController: getAllIssue()", "successful");
+            logger.info("All Issue's successfully retrieved");
             let apiResponse = response.generate(false, "All issue's successfully retrieved", 200, result);
             res.send(apiResponse);
         }
@@ -45,11 +45,11 @@ let getAllIssuesOnUser = (req, res) => {
             AssignModel.find({ assignedToId: userId }).lean().select('issueId -_id')
             .exec((err, result) => {
                 if (err) {
-                    logger.error(`${err}`, "IssueController: getAllIssuesOnUser(): getIssueIds()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Server error, failed to retrieve assigned issues", 500, null);
                     reject(apiResponse);
                 } else if(check.isEmpty(result)) {
-                    logger.error("No Issues yet assigned to user", "IssueController: getAllIssuesOnUser(): getIssueIds()", "low");
+                    logger.error("No Issues yet assigned to user");
                     let apiResponse = response.generate(true, "No Issues yet assigned to user", 404, null);
                     reject(apiResponse);
                 } else {
@@ -67,14 +67,14 @@ let getAllIssuesOnUser = (req, res) => {
             IssueModel.find({ issueId: issueIds }).lean().select('-_id -__v')
                 .exec((err, result) => {
                     if (err) {
-                        logger.error(`${err}`, "IssueController: getAllIssuesOnUser(): getAllIssues()", "high");
+                        logger.error(err);
                     } else if (result) {
                         resolve(result);
                     }
                 })
 
         })
-    }//end of getAllIssues
+    } //end of getAllIssues
 
 
     getIssueIds(req, res)
@@ -105,12 +105,12 @@ let createNewIssue = (req, res) => {
     });
     newIssue.save((err, result) => {
         if (err) {
-            logger.error(`${err}`, "IssueController: createNewIssue(): generateIssue()", "high");
+            logger.error(err);
             let apiResonse = response.generate(true, "Couldn't create issue", 500, null);
             res.status(apiResonse.status).send(apiResonse);
 
         } else {
-            logger.info("New Issue created successfully", "IssueController: createNewIssue(): generateIssue()", "successful");
+            logger.info("New Issue created successfully");
             resultObj = newIssue.toObject();
             let apiResponse = response.generate(false, "New Issue created successfully", 201, resultObj);
             res.send(apiResponse);
@@ -128,7 +128,7 @@ let getSingleIssue = (req, res) => {
     let verifyId = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(issueId)) {
-                logger.error("No issue id found", "IssueController: getSingleIssue(): verifyId()", "low");
+                logger.error("No issue id found");
                 let apiResponse = response.generate(true, "No user id found", 500, null);
                 reject(apiResponse);
             } else {
@@ -143,15 +143,15 @@ let getSingleIssue = (req, res) => {
             .select('-__v -_id').lean()
             .exec((err, result) => {
                 if (err) {
-                    logger.error(err, 'IssueController: getSingleIssue(): findIssue()', "med");
+                    logger.error(err);
                     let apiResponse = response.generate(true, 'Failed To Find Issue Details', 500, null);
                     reject(apiResponse);
                 } else if (check.isEmpty(result)) {
-                    logger.error('No Issue Found', 'IssueController: getSingleIssue(): findIssue()', "low");
+                    logger.error('No Issue Found');
                     let apiResponse = response.generate(true, 'No Issue Found', 404, null);
                     reject(apiResponse);
                 } else {
-                    logger.info('Issue Found', 'IssueController: getSingleIssue(): findIssue()', "successful");
+                    logger.info('Issue Found');
                     resolve(result);
                 }
             });
@@ -180,33 +180,33 @@ let editIssue = (req, res) => {
     let verifyInput = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(issueId)) {
-                logger.error("Empty issueId string", "IssueController: editIssue(): verifyInput()", "low");
+                logger.error("Empty issueId string");
                 let apiResponse = response.generate(true, "Empty userId string, couldn't locate user", 500, null);
                 reject(apiResponse);
             } else {
                 resolve(req);
             }
         });
-    }// end of verify input
+    } // end of verify input
 
     let findIssue = () => {
         return new Promise((resolve, reject) => {
             IssueModel.findOne({ 'issueId': issueId }).select('-_id -__v').lean().exec((err, result) => {
                 if (err) {
-                    logger.error(`Error occurred: ${err}`, "IssueController: editIssue(): findIssue()", "high");
+                    logger.error(`Error occurred: ${err}`);
                     let apiResponse = response.generate(true, "Couldn't locate issue", 500, null);
                     reject(apiResponse);
                 } else if (check.isEmpty(result)) {
-                    logger.error(`Cannot find Issue`, "IssueController: editIssue(): findIssue()", "high");
+                    logger.error(`Cannot find Issue`);
                     let apiResponse = response.generate(true, "Couldn't locate Issue", 404, null);
                     reject(apiResponse);
                 } else {
-                    logger.info(`Found issue`, "IssueController: editIssue(): findIssue()", "successful");
+                    logger.info(`Found issue`);
                     resolve(result);
                 }
             });
         });
-    }// end of find issue
+    } // end of find issue
 
     let updateIssue = () => {
 
@@ -220,14 +220,14 @@ let editIssue = (req, res) => {
             IssueModel.update({ 'issueId': issueId }, options).exec((err, result) => {
                 
                 if (err) {
-                    logger.error(`Error occurred: ${err}`, "IssueController: editIssue(): updateIssue()", "high");
+                    logger.error(`Error occurred: ${err}`);
                     let apiResponse = response.generate(true, "failed to update user", 503, null);
                     reject(apiResponse);
                 } else if(result.n > 0) {
-                    logger.info(`Issue updated successfully`, "IssueController: editIssue(): updateIssue()", "successful");
+                    logger.info(`Issue updated successfully`);
                     resolve(result);
                 } else {
-                    logger.error("No new data found to update", "IssueController: editIssue(): updateIssue()", "med");
+                    logger.error("No new data found to update");
                     let apiResponse = response.generate(true, "No new data found to update", 404, null);
                     reject(apiResponse);
                 }
@@ -258,71 +258,71 @@ let removeIssue = (req, res) => {
             IssueModel.deleteOne({ 'issueId': issueId, 'creatorId': req.user.userId })
                 .exec((err, result) => {
                     if (err) {
-                        logger.error(`${err}`, "IssueController: removeIssue(): deleteIssue()", "high");
+                        logger.error(err);
                         let apiResponse = response.generate(true, "Couldn't delete the issue", 500, null);
                         reject(apiResponse);
                     } else if (result.result.n > 0) {
-                        logger.info("Issue removed successfully", "IssueController: removeIssue(): deleteIssue()", "successful");
+                        logger.info("Issue removed successfully");
                         resolve(result);
 
                     } else {
-                        logger.error(`Couldn't found the issue while deleting it`, "IssueController: removeIssue(): deleteIssue()", "med");
+                        logger.error(`Couldn't found the issue while deleting it`);
                         let apiResponse = response.generate(true, "Couldn't delete the issue, invalid Id", 404, null);
                         reject(apiResponse);
                     }
                 });
         });
-    }// end of remove issue
+    } // end of remove issue
 
     let removeAssigneesOnIssue = (req, res) => {
         return new Promise((resolve, reject) => {
             AssignModel.deleteMany({ issueId: issueId})
             .exec((err, result) => {
                 if(err) {
-                    logger.error(`${err}`, "IssueController: removeIssue(): removeAssigneesOnIssue()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Couldn't remove assignees on issue", 500, null);
                     reject(apiResponse);
                 } else if (result.result.n > 0) {
-                    logger.info("Assignees on Issue removed successfully", "IssueController: removeIssue(): removeAssigneesOnIssue()", "successful");
+                    logger.info("Assignees on Issue removed successfully");
                     resolve(result);
                 } else {
-                    logger.error(`Couldn't found any assignee on issue`, "IssueController: removeIssue(): removeAssigneesOnIssue()", "low");
+                    logger.error(`Couldn't found any assignee on issue`);
                     resolve(result);
                 }
             })
         })
-    }//end of remove assignee on issue
+    } //end of remove assignee on issue
 
     let removeWatchersOnIssue = (req, res) => {
         return new Promise((resolve, reject) => {
             WatchModel.deleteMany({issueId: issueId})
             .exec((err, result) => {
                 if(err) {
-                    logger.error(`${err}`, "IssueController: removeIssue(): removeWatchersOnIssue()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Couldn't remove watchers on the issue", 500, null);
                     reject(apiResponse);
                 } else if(result.result.n > 0) {
                     resolve(result);
                 } else {
-                    logger.error(`Couldn't found any watcher on issue`, "IssueController: removeIssue(): removeWatchersOnIssue()", "low");
+                    logger.error(`Couldn't found any watcher on issue`);
                     resolve(result);
                 }
             })
         })
-    }//end of remove watchers on the issue
+    } //end of remove watchers on the issue
 
     let removeCommentsOnIssue = (req, res) => {
         return new Promise((resolve, reject) => {
             CommentModel.deleteMany({issueId: issueId})
             .exec((err, result) => {
                 if(err) {
-                    logger.error(`${err}`, "IssueController: removeIssue(): removeCommentsOnIssue()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Couldn't remove watchers on the issue", 500, null);
                     reject(apiResponse);
                 } else if (result.result.n > 0) {
                     resolve(result);
                 } else {
-                    logger.error(`Couldn't found any comment on issue`, "IssueController: removeIssue(): removeCommentsOnIssue()", "low");
+                    logger.error(`Couldn't found any comment on issue`);
                     let apiResponse = response.generate(true, "Couldn't found any comment on issue", 404, null);
                     reject(apiResponse);
                 }
@@ -358,11 +358,11 @@ let addComment = (req, res) => {
             IssueModel.findOne({ issueId: issueId })
             .select('-_id -__v').lean().exec((err, result) => {
                 if(err) {
-                    logger.error(`Error occurred while searching for issue: ${err}`, "IssueController: addComment(): issueExists()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Error occurred while searching for the issue", 500, null);
                     reject(apiResponse);
                 } else if(check.isEmpty(result)){
-                    logger.error("Couldn't find the issue to comment", "IssueController: addComment(): issueExists()", "med");
+                    logger.error("Couldn't find the issue to comment");
                     let apiResponse = response.generate(true, "Unable to find the issue to comment on it", 404, null);
                     reject(apiResponse);
                 } else {
@@ -372,7 +372,7 @@ let addComment = (req, res) => {
             });
         }); 
         
-    }// end of issue exists
+    } // end of issue exists
     
 
     let createComment = () => {
@@ -389,11 +389,11 @@ let addComment = (req, res) => {
         return new Promise((resolve, reject) => {
             newComment.save((err, result) => {
                 if(err) {
-                    logger.error(`Error occurred while creating comment: ${err}`, "IssueController: addComment(): createComment()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Unable to add comment", 500, null);
                     reject(apiResponse);
                 } else {
-                    logger.info("Comment created successfully", "IssueController: addComment(): createComment()", "successful");
+                    logger.info("Comment created successfully");
                     let resultObj = newComment.toObject();
                     delete resultObj.__v;
                     delete resultObj._id;
@@ -401,7 +401,7 @@ let addComment = (req, res) => {
                 }
             });
         });
-    }// end of createComment
+    } // end of createComment
 
     issueExists(req, res)
     .then(createComment)
@@ -422,34 +422,34 @@ let getAllCommentOnIssue = (req, res) => {
     let verifyInput = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(issueId)) {
-                logger.error("Empty issueId string", "IssueController: getAllCommentOnIssue(): verifyInput()", "low");
+                logger.error("Empty issueId string");
                 let apiResponse = response.generate(true, "Empty issueId string, couldn't locate issue", 500, null);
                 reject(apiResponse);
             } else {
                 resolve(req);
             }
         });
-    }// end of verify input
+    } // end of verify input
     
     let findComments = () => {
         return new Promise((resolve, reject) => {
             CommentModel.find({'issueId': issueId})
             .select('-_id -__v').lean().exec((err, result) => {
                 if(err) {
-                    logger.error(`${err}`, "IssueController: getAllCommentOnIssue(): findComments()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Unable to retrieve comments", 500, null);
                     reject(apiResponse);
                 } else if(check.isEmpty(result)) {
-                    logger.error("No comments found for the Issue", "IssueController: getAllCommentOnIssue(): findComments()", "low");
+                    logger.error("No comments found for the Issue");
                     let apiResponse = response.generate(true, "No comments found for the Issue", 404, null);
                     reject(apiResponse);
                 } else {
-                    logger.info("All comments retrivied successfully", "IssueController: getAllCommentOnIssue(): findComments()", "successful");
+                    logger.info("All comments retrivied successfully");
                     resolve(result);
                 }
             });
         });
-    }// end of find comments
+    } // end of find comments
 
     verifyInput(req, res)
     .then(findComments)
@@ -471,34 +471,34 @@ let deleteComment = (req, res) => {
     let verifyInput = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(commentId)) {
-                logger.error("Empty commentId string", "IssueController: deleteComment(): verifyInput()", "low");
+                logger.error("Empty commentId string");
                 let apiResponse = response.generate(true, "Empty commentId string, couldn't locate comment", 500, null);
                 reject(apiResponse);
             } else {
                 resolve(req);
             }
         });
-    }// end of verify input
+    } // end of verify input
 
     let removeComment = () => {
         return new Promise((resolve, reject) => {
             CommentModel.deleteOne({ commentId: commentId, creatorId: userId, issueId: issueId })
             .exec((err, result) => {
                 if(err) {
-                    logger.error(`Error occurred while deleting comment: ${err}`, "IssueController: deleteComment(): removeComment()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Error occurred while deleting comment", 500, null);
                     reject(apiResponse);
                 } else if(result.result.n > 0) {
-                    logger.info("Successfully deleted comment", "IssueController: deleteComment(): removeComment()", "successful");
+                    logger.info("Successfully deleted comment");
                     resolve(result);
                 } else {
-                    logger.error("Invalid comment id", "IssueController: deleteComment(): removeComment()", "med");
+                    logger.error("Invalid comment id");
                     let apiResponse = response.generate(true, "Unable to delete comment, check the comment id", 404, null);
                     reject(apiResponse);
                 }
             });
         });
-    }// end of removeComment
+    } // end of removeComment
 
     verifyInput(req, res)
     .then(removeComment)
@@ -522,13 +522,13 @@ let addToWatchList = (req, res) => {
             WatchModel.find({ issueId: issueId, userId: userId}).lean()
             .exec((err,result) => {
                 if(err) {
-                    logger.error(`${err}`, "IssueController: addToWatchList(): verifyifExists()", "high");
+                    logger.error(err);
                     let apiResonse = response.generate(true, "Couldn't verify if user is already to watch list", 500, null);
                     reject(apiResonse);
                 } if(check.isEmpty(result)) {
                     resolve(req);
                 } else {
-                    logger.error("User already in the watch list of the issue", "IssueController: addToWatchList(): verifyifExists()", "med");
+                    logger.error("User already in the watch list of the issue");
                     let apiResonse = response.generate(true, "User already in the watch list of the issue", 304, null);
                     reject(apiResonse);
                 }
@@ -548,11 +548,11 @@ let addToWatchList = (req, res) => {
         return new Promise((resolve, reject) => {
             newWatcher.save((err, result) => {
                 if (err) {
-                    logger.error(`${err}`, "IssueController: addToWatchList(): addToWatcher()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Unable to add you to watch list", 500, null);
                     reject(apiResponse)
                 } else {
-                    logger.info("successfully added to watch list", "IssueController: addToWatchList()", "successful");
+                    logger.info("successfully added to watch list");
                     watcherObj = newWatcher.toObject();
                     resolve(watcherObj);
                 }
@@ -578,14 +578,14 @@ let getAllWatchersOnIssue = (req, res) => {
     let verifyInput = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(issueId)) {
-                logger.error("Empty issueId string", "IssueController: getAllWatchersOnIssue(): verifyInput()", "low");
+                logger.error("Empty issueId string");
                 let apiResponse = response.generate(true, "Empty issueId string, couldn't locate issue", 500, null);
                 reject(apiResponse);
             } else {
                 resolve(req);
             }
         });
-    }// end of verify input
+    } // end of verify input
 
     let findWatchers = () => {
         return new Promise((resolve, reject) => {
@@ -593,20 +593,20 @@ let getAllWatchersOnIssue = (req, res) => {
                 .select('-_id -__v').lean().exec((err, result) => {
                    
                     if (err) {
-                        logger.error(`${err}`, "IssueController: getAllWatchersOnIssue(): findWatchers()", "high");
+                        logger.error(err);
                         let apiResponse = response.generate(true, "Unable to retrieve comments", 500, null);
                         reject(apiResponse);
                     } else if (check.isEmpty(result)) {
-                        logger.error("No watchers found for the Issue", "IssueController: getAllWatchersOnIssue(): findWatchers()", "low");
+                        logger.error("No watchers found for the Issue");
                         let apiResponse = response.generate(true, "No watchers found for the Issue", 404, null);
                         reject(apiResponse);
                     } else {
-                        logger.info("All watchers retrivied successfully", "IssueController: getAllWatchersOnIssue(): findWatchers()", "successful");
+                        logger.info("All watchers retrivied successfully");
                         resolve(result);
                     }
                 });
         });
-    }// end of find watchers
+    } // end of find watchers
 
     verifyInput(req, res)
     .then(findWatchers)
@@ -635,11 +635,11 @@ let addAssignee = (req, res) => {
         return new Promise((resolve, reject) => {
             UserModel.findOne({ userId: assignedToId }).lean().exec((err, result) => {
                 if (err) {
-                    logger.error(`Error occurred: ${err}`, "IssueController: addAssignee(): findUser()", "high");
+                    logger.error(err);
                     let apiResonse = response.generate(true, "Couldn't find the user", 500, null);
                     reject(apiResonse);
                 } if (check.isEmpty(result)) {
-                    logger.error(`No user found`, "IssueController: addAssignee(): findUser()", "med");
+                    logger.error(`No user found`);
                     let apiResonse = response.generate(true, "Couldn't find the user", 404, null);
                     reject(apiResonse);
                 } else {
@@ -655,13 +655,13 @@ let addAssignee = (req, res) => {
             AssignModel.find({ issueId: issueId, assignedToId: assignedToId })
             .exec((err, result) => {
                 if(err) {
-                    logger.error(`${err}`, "IssueController: addAssignee(): checkIfExists()", "high");
+                    logger.error(err);
                     let apiResonse = response.generate(true, "Couldn't add user to assignee for the issue, server error", 500, null);
                     reject(apiResonse);
                 } else if(check.isEmpty(result)) {
                     resolve(req);
                 } else {
-                    logger.error(`User already present in assignee list for the issue`, "IssueController: addAssignee(): checkIfExists()", "med");
+                    logger.error(`User already present in assignee list for the issue`);
                     let apiResponse = response.generate(true, "User already present in assignee list for the issue", 304, null);
                     reject(apiResponse);
                 }
@@ -684,11 +684,11 @@ let addAssignee = (req, res) => {
         return new Promise((resolve, reject) => {
             newAssignee.save((err, result) => {
                 if (err) {
-                    logger.error(`${err}`, "IssueController: addAssignee(): createAssignee()", "high");
+                    logger.error(err);
                     let apiResonse = response.generate(true, "Unable to assign an assignee", 500, null);
                     reject(apiResonse);
                 } else {
-                    logger.info("new Assignee created successfully", "IssueController: addAssignee(): createAssignee()", "successful");
+                    logger.info("new Assignee created successfully");
                     resolve(result);
                 }
             });
@@ -714,29 +714,29 @@ let getAllAssigneeOnIssue = (req, res) => {
     let verifyInput = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(issueId)) {
-                logger.error("Empty issueId string", "IssueController: getAllAssigneeOnIssue(): verifyInput()", "low");
+                logger.error("Empty issueId string");
                 let apiResponse = response.generate(true, "Empty issueId string, couldn't locate issue", 500, null);
                 reject(apiResponse);
             } else {
                 resolve(req);
             }
         });
-    }// end of verify input
+    } // end of verify input
 
     let findAssignee = () => {
         return new Promise((resolve, reject) => {
             AssignModel.find({ issueId: issueId }).select('-__v -_id').lean()
             .exec((err, result) => {
                 if (err) {
-                    logger.error(`${err}`, "IssueController: getAllAssigneeOnIssue(): findAssignee()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "Unable to get assignees on the issue, server error", 500, null);
                     reject(apiResponse);
                 } else if (check.isEmpty(result)) {
-                    logger.error("No assignee found for the Issue", "IssueController: getAllAssigneeOnIssue(): findAssignee()", "low");
+                    logger.error("No assignee found for the Issue");
                     let apiResponse = response.generate(true, "No comments found for the Issue", 404, null);
                     reject(apiResponse);
                 } else {
-                    logger.info("All assignees retrivied successfully", "IssueController: getAllAssigneeOnIssue(): findAssignee()", "successful");
+                    logger.info("All assignees retrivied successfully");
                     resolve(result);
                 }
             })
@@ -761,27 +761,27 @@ let removeAssigneeOnIssue = (req, res) => {
     let verifyInput = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(assignId)) {
-                logger.error("Empty commentId string", "IssueController: removeAssigneeOnIssue(): verifyInput()", "low");
+                logger.error("Empty commentId string");
                 let apiResponse = response.generate(true, "Empty assignId string, couldn't locate assignee", 500, null);
                 reject(apiResponse);
             } else {
                 resolve(req);
             }
         });
-    }// end of verify input
+    } // end of verify input
 
     let removeAssignee = () => {
         return new Promise((resolve, reject) => {
             AssignModel.deleteOne({assignId: assignId}).exec((err, result)=> {
                 if(err) {
-                    logger.error(`${err}`, "IssueController: removeAssigneeOnIssue(): removeAssignee()", "high");
+                    logger.error(err);
                     let apiResponse = response.generate(true, "There was an error so we coukdn't remove the assignee", 500, null);
                     reject(apiResponse);
                 } else if (result.result.n > 0) {
-                    logger.info("Successfully removed assignee", "IssueController: removeAssigneeOnIssue(): removeAssignee()", "successful");
+                    logger.info("Successfully removed assignee");
                     resolve(result);
                 } else {
-                    logger.error("Invalid assign id", "IssueController: removeAssigneeOnIssue(): removeAssignee()", "med");
+                    logger.error("Invalid assign id");
                     let apiResponse = response.generate(true, "Unable to remove assignee, check the assign id", 404, null);
                     reject(apiResponse);
                 }
@@ -806,7 +806,7 @@ let getAllIssuesByUserCount = (req, res) => {
 
     IssueModel.count({ creatorId: userId }).exec((err, count) => {
         if(err) {
-            logger.error(`${err}`, "IssueController: getAllIssuesByUserCount()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Server error couldn't retrieve count of all issue by user", 500, null);
             res.send(apiResponse);
         } else {
@@ -820,7 +820,7 @@ let getAllIssuesByUserCount = (req, res) => {
 let getIssuesDone = (req, res) => {
     IssueModel.count({ status: 'done' }).exec((err, count) => {
         if (err) {
-            logger.error(`${err}`, "IssueController: getIssuesDone()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Server error couldn't retrieve count of all done issues", 500, null);
             res.send(apiResponse);
         } else {
@@ -834,7 +834,7 @@ let getIssuesDone = (req, res) => {
 let getIssuesInProgress = (req, res) => {
     IssueModel.count({ status: 'in-progress' }).exec((err, count) => {
         if (err) {
-            logger.error(`${err}`, "IssueController: getIssuesInProgress()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Server error couldn't retrieve count of all in-progress issues", 500, null);
             res.send(apiResponse);
         } else {
@@ -848,7 +848,7 @@ let getIssuesInProgress = (req, res) => {
 let getIssuesInTest = (req, res) => {
     IssueModel.count({ status: 'in-test' }).exec((err, count) => {
         if (err) {
-            logger.error(`${err}`, "IssueController: getIssuesInTest()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Server error couldn't retrieve count of all in-test issues", 500, null);
             res.send(apiResponse);
         } else {
@@ -862,7 +862,7 @@ let getIssuesInTest = (req, res) => {
 let getIssuesInBacklog = (req, res) => {
     IssueModel.count({ status: 'backlog' }).exec((err, count) => {
         if (err) {
-            logger.error(`${err}`, "IssueController: getIssuesInBacklog()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Server error couldn't retrieve count of all backlog issues", 500, null);
             res.send(apiResponse);
         } else {
@@ -876,7 +876,7 @@ let getIssuesInBacklog = (req, res) => {
 let getAllIssuesCount = (req, res) => {
     IssueModel.count({}).exec((err, count) => {
         if (err) {
-            logger.error(`${err}`, "IssueController: getAllIssuesCount()", "high");
+            logger.error(err);
             let apiResponse = response.generate(true, "Server error couldn't retrieve count of all the issues", 500, null);
             res.send(apiResponse);
         } else {

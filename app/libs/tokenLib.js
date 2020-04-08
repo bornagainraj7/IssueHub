@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const shortid = require('shortid');
 const secretKey = '8)m3Ve12y1r4nd0mP455w012d'; //someveryrandomPassword
-const logger = require('./loggerLib');
+const logger = require('tracer').colorConsole();
 
 
 let generateToken = (data, cb) => {
@@ -32,7 +32,7 @@ let generateToken = (data, cb) => {
 let verifyToken = (token, secretKey, cb) => {
     jwt.verify(token, secretKey, function (err, decoded) {
         if (err) {
-            logger.error(`Couldnt verify token, error: ${err}`, "TokenLib: verifyClaim()", "med");
+            logger.error(err);
             cb(err, null);
         } else {
             // logger.info("Token verified successfully", "TokenLib: verifyClaim()", 'successful');
@@ -45,7 +45,7 @@ let verifyToken = (token, secretKey, cb) => {
 let verifyWithoutSecret = (token, cb) => {
     jwt.verify(token, secretKey, function (err, decoded) {
         if (err) {
-            logger.error(`Couldnt verify token, error: ${err}`, "TokenLib: verifyWithoutSecret()", "med");
+            logger.error(err);
             cb(err, null);
         } else {
             // logger.info("Token verified successfully", "TokenLib: verifyClaim()", 'successful');

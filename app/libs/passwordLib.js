@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
 /* Custom Library */
-let logger = require("./loggerLib");
+let logger = require('tracer').colorConsole();
 
 let hashpassword = myPlaintextPassword => {
     let salt = bcrypt.genSaltSync(saltRounds);
@@ -14,10 +14,10 @@ let hashpassword = myPlaintextPassword => {
 let comparePassword = (password, hashPassword, cb) => {
     bcrypt.compare(password, hashPassword, (err, res) => {
         if (err) {
-            logger.error(`Error occurred: ${err.message}`, "Password Comparison Error: PasswordLib", "med");
+            logger.error(err);
             cb(err, null);
         } else {
-            logger.info("Password match successfully", "PasswordLib: comparePassword()", "successful");
+            logger.info("Password match successfully");
             cb(null, res);
         }
     });
